@@ -35,14 +35,14 @@ def concatenate_nfa_machines(nfa1_file_path, nfa2_file_path):
     nfa2 = nfa2.replace('?','q')
     nfa2 = eval(nfa2)
 
-
+    final_state = 'q' + str(number_of_nfa2_states + number_of_nfa1_states)
     # Create a new NFA machine by concatenating the two machines
     new_nfa = {
-        "states": nfa1["states"] | nfa2["states"],
+        "states": nfa1["states"] | nfa2["states"] | {final_state},
         "input_symbols": nfa1["input_symbols"] | nfa2["input_symbols"],
         "transitions": {},
         "initial_state": nfa1["initial_state"],
-        "final_states": nfa2["final_states"]
+        "final_states": {final_state}
     }
 
     # Copy the transitions from the first NFA machine
@@ -64,6 +64,9 @@ def concatenate_nfa_machines(nfa1_file_path, nfa2_file_path):
     for state in nfa1["final_states"]:
         new_nfa["transitions"][state][""] = {nfa2["initial_state"]}
 
+    for state in nfa2["final_states"]:
+        new_nfa["transitions"][state][""] = {final_state}
+
     return new_nfa
 
 # Example usage
@@ -83,14 +86,12 @@ for key in new_nfa["transitions"]:
     a = new_nfa["transitions"][key]
     for key2 in new_nfa["transitions"][key]:
         new_nfa["transitions"][key][key2] = str(new_nfa["transitions"][key][key2])
-#new_nfa["transitions"] = transitions
 
-print(new_nfa)
 new_nfa = str(new_nfa)
 
 new_nfa = eval(new_nfa)
 outfile = json.dumps(new_nfa,indent=4)
-#json.dumps(new_nfa, default=lambda x: list(x) if isinstance(x, set) else x)
+
 with open('concat_output.json','w') as f:
     f.write(outfile)
 

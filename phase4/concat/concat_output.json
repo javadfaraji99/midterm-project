@@ -1,6 +1,6 @@
 {
-    "states": "{'q3', 'q1', 'q0', 'q2', 'q4'}",
-    "input_symbols": "{'b', '1', 'a', '2'}",
+    "states": "{'q0', 'q5', 'q4', 'q2', 'q1', 'q3'}",
+    "input_symbols": "{'b', 'a', '1', '2'}",
     "transitions": {
         "q0": {
             "1": "{'q0'}",
@@ -15,8 +15,10 @@
         "q3": {
             "a": "{'q4'}"
         },
-        "q4": {}
+        "q4": {
+            "": "{'q5'}"
+        }
     },
     "initial_state": "q0",
-    "final_states": "{'q4'}"
+    "final_states": "{'q5'}"
 }
